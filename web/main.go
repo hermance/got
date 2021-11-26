@@ -9,39 +9,10 @@ import (
 )
 
 var mainTemplate = template.Must(template.ParseFiles("views/index.html"))
-var editTemplate = template.Must(template.ParseFiles("views/new.html"))
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	mainTemplate.Execute(w, nil)
 }
-
-type New struct {
-	Test string
-}
-
-func newHandler(w http.ResponseWriter, r *http.Request) {
-	editTemplate.Execute(w, &New{Test: "test"})
-}
-
-func addNewHandler(w http.ResponseWriter, r *http.Request) {
-    if r.URL.Path != "/addNew" {
-		log.Println("404")
-		http.Error(w, "404 not found.", http.StatusNotFound)
-		return
-	}
-	if err := r.ParseForm(); err != nil {
-		log.Println("ParseForm() err: %v", err)
-		return
-	}
-	username := r.FormValue("username")
-	date := r.FormValue("date")
-	log.Println("username = %s\n", username)
-	log.Println("date = %s\n", date)
-	// TODO api call
-
-	http.Redirect(w, r, "/", http.StatusSeeOther)
-}
-
 
 func main() {
 	err := godotenv.Load()
@@ -61,8 +32,8 @@ func main() {
 
 	// routing
 	mux.HandleFunc("/", indexHandler)
-	mux.HandleFunc("/new", newHandler)
 	mux.HandleFunc("/addNew", addNewHandler)
+	mux.HandleFunc("/new", newHandler)
 
 	http.ListenAndServe(":"+port, mux)
 }
