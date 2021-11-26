@@ -12,16 +12,25 @@ var newTemplate = template.Must(template.ParseFiles("views/new.html"))
 
 type New struct {
 	Test string
+	Users []User
+}
+
+// A Response struct to map the Entire Response
+type User struct {
+    Name    string    `json:"name"`
 }
 
 func newHandler(w http.ResponseWriter, r *http.Request) {
-	newTemplate.Execute(w, &New{Test: "test"})
+	getUsers(w)
+	var emptyUsers []User
+	newTemplate.Execute(w, &New{Test: "test", Users: emptyUsers})
 }
 
-func addNewApiCall(username string, date string){
+func addNewApiCall(username string, date string, status string){
 	postBody, _ := json.Marshal(map[string]string{
 		"username":  username,
 		"date": date,
+		"status": status,
 	 })
 
 	responseBody := bytes.NewBuffer(postBody)
@@ -46,6 +55,26 @@ func addNewApiCall(username string, date string){
 	log.Println(sb)
 }
 
+func getUsers(w http.ResponseWriter){
+	
+	response, err := http.Get("http://127.0.0.1/users")
+    if err != nil {
+        log.Println(err.Error())
+		return
+    }
+
+    responseData, err := ioutil.ReadAll(response.Body)
+    if err != nil {
+        log.Println(err)
+		return
+    }
+
+	var responseObject []User;
+	json.Unmarshal(responseData, &responseObject)
+	newTemplate.Execute(w, &New{Test: "test", Users: responseObject})
+}
+
+
 func addNewHandler(w http.ResponseWriter, r *http.Request) {
     if r.URL.Path != "/addNew" {
 		log.Println("404")
@@ -58,8 +87,9 @@ func addNewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	username := r.FormValue("username")
 	date := r.FormValue("date")
+	status := r.FormValue("status")
 
-	addNewApiCall(username, date)
+	addNewApiCall(username, date, status)
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
