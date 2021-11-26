@@ -1,1 +1,4 @@
 api/.env
+#compiled web files
+/web/web
+/web/tmp
