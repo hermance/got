@@ -1,17 +1,17 @@
-package main
+package types
 
 import "gorm.io/gorm"
 
 type Organization struct {
 	gorm.Model
-	name string
+	Name string
 }
 
 type User struct {
 	gorm.Model
-	email    string
-	name     string
-	password string
+	Email    string
+	Name     string
+	Password string
 }
 
 type UserConfig struct {
@@ -20,6 +20,6 @@ type UserConfig struct {
 
 type WorkDay struct {
 	gorm.Model
-	date     string
-	day_type string // on_site / remote / off
+	Data     string
+	Day_type string // on_site / remote / off
 }

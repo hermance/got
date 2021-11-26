@@ -2,6 +2,7 @@ package main
 
 import (
 	"api/src/routes"
+	"api/src/types"
 	"fmt"
 	"log"
 	"os"
@@ -48,5 +49,5 @@ func load_env() {
 }
 
 func migrate(db *gorm.DB) {
-	db.AutoMigrate(&Organization{}, &User{}, &UserConfig{}, &WorkDay{})
+	db.AutoMigrate(&types.Organization{}, &types.User{}, &types.UserConfig{}, &types.WorkDay{})
 }
