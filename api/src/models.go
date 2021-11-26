@@ -2,7 +2,7 @@ package main
 
 import "gorm.io/gorm"
 
-type Organisation struct {
+type Organization struct {
 	gorm.Model
 	name string
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api/src/routes"
 	"fmt"
 	"log"
 	"os"
@@ -20,13 +21,7 @@ func main() {
 
 func listen(db *gorm.DB) {
 	r := gin.Default()
-
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
+	routes.Bind_routes(r, db)
 	r.Run()
 }
 
@@ -53,5 +48,5 @@ func load_env() {
 }
 
 func migrate(db *gorm.DB) {
-	db.AutoMigrate(&Organisation{}, &User{}, &UserConfig{}, &WorkDay{})
+	db.AutoMigrate(&Organization{}, &User{}, &UserConfig{}, &WorkDay{})
 }
