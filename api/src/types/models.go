@@ -3,23 +3,22 @@ package types
 import "gorm.io/gorm"
 
 type Organization struct {
-	gorm.Model
-	Name string
+	gorm.Model `json:"-"`
+	Name       string
 }
 
 type User struct {
-	gorm.Model
-	Email    string
-	Name     string
-	Password string
+	gorm.Model `json:"-"`
+	Email      string
+	Name       string
 }
 
 type UserConfig struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 }
 
 type WorkDay struct {
-	gorm.Model
-	Data     string
-	Day_type string // on_site / remote / off
+	gorm.Model `json:"-"`
+	Data       string
+	Day_type   string // on_site / remote / off
 }

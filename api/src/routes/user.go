@@ -38,7 +38,15 @@ func Create_user(db *gorm.DB) func(c *gin.Context) {
 		}
 
 		// db.First(&product, "code = ?", "D42") // find product with code D42
-		db.Create(&types.User{Email: requestBody.Email, Name: requestBody.Name, Password: requestBody.Password})
+		db.Create(&types.User{Email: requestBody.Email, Name: requestBody.Name})
 		c.JSON(http.StatusOK, gin.H{"user": requestBody.Name})
+	}
+}
+
+func Get_users(db *gorm.DB) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		var users []types.User
+		db.Find(&users)
+		c.JSON(http.StatusOK, gin.H{"users": users})
 	}
 }
