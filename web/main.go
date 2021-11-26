@@ -23,6 +23,26 @@ func newHandler(w http.ResponseWriter, r *http.Request) {
 	editTemplate.Execute(w, &New{Test: "test"})
 }
 
+func addNewHandler(w http.ResponseWriter, r *http.Request) {
+    if r.URL.Path != "/addNew" {
+		log.Println("404")
+		http.Error(w, "404 not found.", http.StatusNotFound)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		log.Println("ParseForm() err: %v", err)
+		return
+	}
+	username := r.FormValue("username")
+	date := r.FormValue("date")
+	log.Println("username = %s\n", username)
+	log.Println("date = %s\n", date)
+	// TODO api call
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -42,6 +62,7 @@ func main() {
 	// routing
 	mux.HandleFunc("/", indexHandler)
 	mux.HandleFunc("/new", newHandler)
+	mux.HandleFunc("/addNew", addNewHandler)
 
 	http.ListenAndServe(":"+port, mux)
 }
