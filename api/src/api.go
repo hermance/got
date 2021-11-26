@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"./routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -20,13 +21,7 @@ func main() {
 
 func listen(db *gorm.DB) {
 	r := gin.Default()
-
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
+	routes.Bind_routes(r)
 	r.Run()
 }
 
@@ -53,5 +48,5 @@ func load_env() {
 }
 
 func migrate(db *gorm.DB) {
-	db.AutoMigrate(&Organisation{}, &User{}, &UserConfig{}, &WorkDay{})
+	db.AutoMigrate(&Organization{}, &User{}, &UserConfig{}, &WorkDay{})
 }
