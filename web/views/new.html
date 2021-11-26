@@ -23,8 +23,9 @@
             <div class="form-group">
                 <select class="form-control form-select" name="username">
                     <option disabled selected>Username</option>
-                    <option value="1">Hermy</option>
-                    <option value="2">Nils</option>
+                    {{ range $element := .Users }}
+                        <option value={{$element}}>{{$element}}</option>
+                    {{end}}
                     <!-- TODO  from API -->
                 </select>
             </div>

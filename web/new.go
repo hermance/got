@@ -19,6 +19,9 @@ type New struct {
 type User struct {
     Name    string    `json:"name"`
 }
+type Response struct {
+    Users    []User    `json:"users"`
+}
 
 func newHandler(w http.ResponseWriter, r *http.Request) {
 	getUsers(w)
@@ -35,7 +38,7 @@ func addNewApiCall(username string, date string, status string){
 
 	responseBody := bytes.NewBuffer(postBody)
 	//Leverage Go's HTTP Post function to make request
-	resp, err := http.Post("http://127.0.0.1/workday", "application/json", responseBody)
+	resp, err := http.Post("http://127.0.0.1:8080/workday", "application/json", responseBody)
 	//Handle Error
 	if err != nil {
 		// TODO display error to the user
@@ -57,7 +60,7 @@ func addNewApiCall(username string, date string, status string){
 
 func getUsers(w http.ResponseWriter){
 	
-	response, err := http.Get("http://127.0.0.1/users")
+	response, err := http.Get("http://127.0.0.1:8080/users")
     if err != nil {
         log.Println(err.Error())
 		return
@@ -69,9 +72,10 @@ func getUsers(w http.ResponseWriter){
 		return
     }
 
-	var responseObject []User;
+	var responseObject Response;
 	json.Unmarshal(responseData, &responseObject)
-	newTemplate.Execute(w, &New{Test: "test", Users: responseObject})
+	log.Println(responseObject)
+	newTemplate.Execute(w, &New{Test: "test", Users: responseObject.Users})
 }
 
 
